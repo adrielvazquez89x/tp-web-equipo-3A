@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Model;
-
+using DataAccessService;
 
 namespace Business
 {
@@ -70,7 +70,7 @@ namespace Business
             try
             {
                 data.setQuery("insert into ARTICULOS(Codigo, Nombre, Descripcion, IdMarca, IdCategoria, Precio) OUTPUT INSERTED.Id values(@Code, @Name, @Description, @idBrand , @idCategory, @Price)");
-                
+
                 data.setParameter("@Code", article.Code);
                 data.setParameter("@Name", article.Name);
                 data.setParameter("@Description", article.Description);
@@ -81,7 +81,7 @@ namespace Business
 
                 int id = data.getIdEcalar();
 
-                foreach(var img in article.UrlImages)
+                foreach (var img in article.UrlImages)
                 {
                     img.IdArticle = id;
                 }
@@ -98,7 +98,7 @@ namespace Business
             {
                 data.closeConnection();
             }
-            
+
         }
 
         public void modifyArticle(Article article)
@@ -117,7 +117,7 @@ namespace Business
 
                 data.executeAction();
                 data.closeConnection();
-                                
+
 
                 foreach (var img in article.UrlImages)
                 {
@@ -142,7 +142,7 @@ namespace Business
             try
             {
                 data.setQuery("delete from ARTICULOS where id = @id");
-                data.setParameter("@id",id);
+                data.setParameter("@id", id);
                 data.executeAction();
 
                 businessImage.DeleteAllArtImages(id);
@@ -161,9 +161,9 @@ namespace Business
             List<Article> filteredArtList = new List<Article>();
             try
             {
-               string query = "SELECT A.Id, A.Codigo, A.Nombre, A.Descripcion, A.IdMarca, A.IdCategoria, A.Precio, I.ImagenUrl, I.Id AS IdImagen, M.Descripcion AS Brand, C.Descripcion AS Category" +
-                    " FROM ARTICULOS A JOIN MARCAS M ON M.Id = A.IdMarca JOIN CATEGORIAS C ON C.Id = A.IdCategoria LEFT JOIN (SELECT I.Id, I.ImagenUrl, I.IdArticulo" +
-                    " FROM IMAGENES I WHERE I.Id IN (SELECT MIN(Id) FROM IMAGENES GROUP BY IdArticulo)) I ON I.IdArticulo = A.Id WHERE ";
+                string query = "SELECT A.Id, A.Codigo, A.Nombre, A.Descripcion, A.IdMarca, A.IdCategoria, A.Precio, I.ImagenUrl, I.Id AS IdImagen, M.Descripcion AS Brand, C.Descripcion AS Category" +
+                     " FROM ARTICULOS A JOIN MARCAS M ON M.Id = A.IdMarca JOIN CATEGORIAS C ON C.Id = A.IdCategoria LEFT JOIN (SELECT I.Id, I.ImagenUrl, I.IdArticulo" +
+                     " FROM IMAGENES I WHERE I.Id IN (SELECT MIN(Id) FROM IMAGENES GROUP BY IdArticulo)) I ON I.IdArticulo = A.Id WHERE ";
                 switch (field)
                 {
                     case "Name":
@@ -264,4 +264,3 @@ namespace Business
         }
     }
 }
-    

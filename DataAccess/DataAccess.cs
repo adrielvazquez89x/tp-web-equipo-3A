@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business
+namespace DataAccessService
 {
     public class DataAccess
     {
@@ -19,10 +19,11 @@ namespace Business
         {
             get { return _reader; }
         }
-
+        
         public DataAccess()
         {
-            _connection = new SqlConnection("server=.\\SQLEXPRESS; database = CATALOGO_P3_DB; integrated security = true");
+            _connection = new SqlConnection($"server=.\\SQLEXPRESS; database = PROMO_DB; integrated security = true");
+           
             _command = new SqlCommand();
         }
 

@@ -52,11 +52,15 @@
     <Compile Include="BusinessArticle.cs" />
     <Compile Include="BusinessBrand.cs" />
     <Compile Include="BusinessCategory.cs" />
+    <Compile Include="BusinessCustomer.cs" />
     <Compile Include="BusinessImage.cs" />
-    <Compile Include="DataAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccessService.csproj">
+      <Project>{d25ece2b-d78d-41b9-a075-c1bd662de33c}</Project>
+      <Name>DataAccessService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{45ebcab5-c37e-4e83-b3a5-ad2ae1b27f46}</Project>
       <Name>Model</Name>
