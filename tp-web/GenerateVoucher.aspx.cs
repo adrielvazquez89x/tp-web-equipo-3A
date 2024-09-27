@@ -16,7 +16,6 @@ namespace tp_web
             BusinessVoucher business = new BusinessVoucher();
 
             string nuevo = business.GetLastCode();
-
         }
 
         protected void btnGenerateVoucher_Click(object sender, EventArgs e)
@@ -30,7 +29,6 @@ namespace tp_web
         private void ShowToast(string message)
         {
             ltlToastMessage.Text = message;
-
 
             ScriptManager.RegisterStartupScript(this, GetType(), "showToastie",
                    "$(document).ready(function() { $('.toast').toast({ delay: 3000 }).toast('show'); });", true);

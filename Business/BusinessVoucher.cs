@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccessService;
+using Model;
 
 namespace Business
 {
@@ -15,7 +17,7 @@ namespace Business
 
             try
             {
-                string lastCode = GetLastCode();
+                string lastCode = GetLastCode(); //y si no hay ninguno?
                 string newCode = GenerateCode(lastCode);
 
                 data.setQuery("Insert into Vouchers (CodigoVoucher) Values (@newCode)");
@@ -71,5 +73,49 @@ namespace Business
 
             return newCode;
         }
+
+        public Voucher getVoucherByCode(string code)
+        {
+            DataAccess data = new DataAccess();
+            try
+            {
+                data.setQuery("select CodigoVoucher, IdCliente, FechaCanje, IdArticulo from Vouchers where CodigoVoucher=@code");
+                data.setParameter("@code", code);
+                data.executeRead();
+
+                SqlDataReader reader = data.Reader;
+                Voucher aux = new Voucher();
+                if (data.Reader.Read())
+                {
+                    aux.Code = code;
+                   
+                    if (reader["FechaCanje"] is DBNull) //caso donde no se canjeo aun
+                    {
+                        aux.DateExchange = new DateTime(1,1,1);
+                    }
+                    else
+                    {
+                        aux.DateExchange = (DateTime)reader["FechaCanje"];
+                        aux.IDArticle = (int)reader["IdArticulo"];
+                        aux.IDClient = (int)reader["IdCliente"];
+                    }
+                }
+                else 
+                {
+                    aux.IDClient = -1; //codigo 1 si no existe
+                }
+                return aux;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                data.closeConnection();
+            }
+        }
+
     }
 }
