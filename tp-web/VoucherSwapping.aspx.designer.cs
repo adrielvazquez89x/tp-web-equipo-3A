@@ -15,30 +15,30 @@ namespace tp_web
     {
 
         /// <summary>
-        /// Control Wizard1.
+        /// Control txtVoucherCode.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Wizard Wizard1;
+        protected global::System.Web.UI.WebControls.TextBox txtVoucherCode;
 
         /// <summary>
-        /// Control WizardStep1.
+        /// Control LabelPrueba.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.WizardStep WizardStep1;
+        protected global::System.Web.UI.WebControls.Label LabelPrueba;
 
         /// <summary>
-        /// Control WizardStep2.
+        /// Control btnSwap.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.WizardStep WizardStep2;
+        protected global::System.Web.UI.WebControls.Button btnSwap;
     }
 }

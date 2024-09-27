@@ -17,41 +17,5 @@ namespace tp_web
 
         }
 
-        protected void btnSwap_Click(object sender, EventArgs e)
-        {
-            try 
-            {
-                BusinessVoucher business = new BusinessVoucher();
-                if (txtVoucherCode.Text != "") //aunque ya se verifica con bootstrap
-                {
-                    string code = txtVoucherCode.Text;
-                    Voucher aux = business.getVoucherByCode(code);
-                    if (aux.IDClient==-1)
-                    {
-                        LabelPrueba.Text = "no existe el codigo de voucher";
-                        LabelPrueba.Visible = true;
-                    }
-                    else
-                    {
-                        if (aux.DateExchange.Year==1 ) 
-                        {
-                            LabelPrueba.Text = "OKKK!";
-                            LabelPrueba.Visible = true;
-                        }
-                        else
-                        {
-                            LabelPrueba.Text = "ya se uso";
-                            LabelPrueba.Visible = true;
-                        }
-                    }
-                }
-            } catch (Exception ex) 
-            {
-                throw ex;
-            }
-            
-            
-
-        }
     }
 }
