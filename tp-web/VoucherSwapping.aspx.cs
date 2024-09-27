@@ -34,8 +34,7 @@ namespace tp_web
                     {
                         if (aux.DateExchange.Year == 1)
                         {
-                            LabelPrueba.Text = "OKKK!";
-                            LabelPrueba.Visible = true;
+                            Wizard1.ActiveStepIndex = 1;
                         }
                         else
                         {
