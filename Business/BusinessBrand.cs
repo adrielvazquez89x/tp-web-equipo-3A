@@ -46,8 +46,6 @@ namespace Business
         public void add(Brand newBrand)
         {
             DataAccess data = new DataAccess();
-
-
             try
             {
                 data.setQuery("insert into Marcas (Descripcion) values ('" + newBrand.Description + "')");

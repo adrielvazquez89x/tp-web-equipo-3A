@@ -11,34 +11,34 @@ namespace tp_web
 {
 
 
-    public partial class GenerateVoucher
+    public partial class VoucherForm
     {
 
         /// <summary>
-        /// Control UpdatePanel1.
+        /// Control Wizard1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.WebControls.Wizard Wizard1;
 
         /// <summary>
-        /// Control btnGenerateVoucher.
+        /// Control WizardStep1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGenerateVoucher;
+        protected global::System.Web.UI.WebControls.WizardStep WizardStep1;
 
         /// <summary>
-        /// Control ltlToastMessage.
+        /// Control WizardStep2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal ltlToastMessage;
+        protected global::System.Web.UI.WebControls.WizardStep WizardStep2;
     }
 }
