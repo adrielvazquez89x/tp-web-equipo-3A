@@ -17,7 +17,8 @@
             <ContentTemplate>
                 <h2>Choose the Prize</h2>
                 <p>aca apareceran las opciones de los premios.</p>
-                    <asp:Button Text="Next" cssclass="btn btn-primary¨ ID="btnNext" runat="server" /> <%--OnClick="btnNext_Click" NO ME ESTA DEJANDO AGREGAR EVENTOS...--%>
+               
+                    <%--<asp:Button Text="Next" cssclass="btn btn-primary¨ ID="btnNext" runat="server" />--%>
             </ContentTemplate>
         </asp:WizardStep>
     </WizardSteps>
