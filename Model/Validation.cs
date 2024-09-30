@@ -49,6 +49,20 @@ namespace Model
             return 0;
         }
 
+        public static int onlyCP(string txt)
+        {
+            foreach (char ch in txt)
+            {
+                if (!(char.IsNumber(ch)))
+                    return -1;
+            }
+            if (txt.Length <4 || txt.Length>6) //el largo debe ser de 4 entre y 6 digitos
+                return -2;
+            if (txt[0] == '0')  // no puede iniciar en 0
+                return -3;
+            return 0;
+        }
+
         public static void onlyLetters(KeyPressEventArgs e)
         {
             if ((e.KeyChar >= 32 && e.KeyChar <= 64) || (e.KeyChar >= 123 && e.KeyChar <= 255))

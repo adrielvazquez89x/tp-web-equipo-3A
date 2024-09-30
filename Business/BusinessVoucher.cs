@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 using DataAccessService;
 using Model;
 
@@ -85,10 +86,9 @@ namespace Business
 
                 SqlDataReader reader = data.Reader;
                 Voucher aux = new Voucher();
+                aux.Code = code;
                 if (data.Reader.Read())
                 {
-                    aux.Code = code;
-                   
                     if (reader["FechaCanje"] is DBNull) //caso donde no se canjeo aun
                     {
                         aux.DateExchange = new DateTime(1,1,1);
@@ -104,6 +104,7 @@ namespace Business
                 {
                     aux.IDClient = -1; //codigo 1 si no existe
                 }
+                data.closeConnection();
                 return aux;
             }
             catch (Exception ex)
@@ -117,5 +118,29 @@ namespace Business
             }
         }
 
+        public void ModifyVoucher(string code, int idCustomer, DateTime date, int idArt)
+        {
+            DataAccess data = new DataAccess();
+            try
+            {
+                data.setQuery("update Vouchers set IdCliente=@idCustomer, FechaCanje=@date, IdArticulo=@idArt where CodigoVoucher=@code");
+                data.setParameter("@idCustomer", idCustomer);
+                data.setParameter("@date", date);
+                data.setParameter("@idArt", idArt);
+                data.setParameter("@code", code);
+
+                data.executeAction();
+                data.closeConnection();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                data.closeConnection();
+            }
+        }
     }
 }

@@ -14,7 +14,8 @@ namespace tp_web
     {
         public List<Article> ArtList { get; set; }
         public int SelectedArticle;
-        public Customer customer;
+        public Customer customer = new Customer();
+        public Voucher voucher = new Voucher();
         protected void Page_Load(object sender, EventArgs e)
         {
             BusinessArticle busines = new BusinessArticle();
@@ -30,7 +31,7 @@ namespace tp_web
             //ArtList[1].UrlImages[0].UrlImage = "https://media.minutouno.com/p/c5f011d97f01b34e511d0f8e3bb09cf0/adjuntos/150/imagenes/039/409/0039409544/ravioles.jpg";
             //ArtList[2].UrlImages[0].UrlImage = "https://www.cetraro.com.ar/wp-content/uploads/canelones-con-verdura.jpg";
 
-            if(!IsPostBack)
+            if (!IsPostBack)
             {
                 rptListaDeCosas.DataSource = ArtList;
                 rptListaDeCosas.DataBind();
@@ -42,18 +43,20 @@ namespace tp_web
             try
             {
                 BusinessVoucher business = new BusinessVoucher();
+
                 if (txtVoucherCode.Text != "") //aunque ya se verifica con bootstrap
                 {
                     string code = txtVoucherCode.Text;
-                    Voucher aux = business.getVoucherByCode(code);
-                    if (aux.IDClient == -1)
+                    voucher = business.getVoucherByCode(code);
+                    if (voucher.IDClient == -1)
                     {
                         ShowErrorAndRedirect("There is no voucher with that code");
                     }
                     else
                     {
-                        if (aux.DateExchange.Year == 1)
+                        if (voucher.DateExchange.Year == 1)
                         {
+                            ViewState["VoucherCode"] = voucher.Code; //necesario para que no se pierda este dato
                             Wizard1.ActiveStepIndex = 1;
                         }
                         else
@@ -71,7 +74,7 @@ namespace tp_web
 
         private void ShowErrorAndRedirect(string script)
         {
-            script = "alert('"+script+ "'); window.location.href='Default.aspx';";
+            script = "alert('" + script + "'); window.location.href='Default.aspx';";
             ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
         }
 
@@ -80,23 +83,11 @@ namespace tp_web
 
         }
 
-        protected void btnSubmit_Click(object sender, EventArgs e)
-        {
-            BusinessCustomer business = new BusinessCustomer();
-            try
-            {
-                //validaciones
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         protected void btnPick_Click(object sender, EventArgs e)
         {
             SelectedArticle = int.Parse(((Button)sender).CommandArgument);
             consola.Text = "click: " + SelectedArticle;
+            ViewState["SelectedArticle"] = SelectedArticle; //necesario para que no se pierda este dato
             Wizard1.ActiveStepIndex = 2;
         }
 
@@ -108,9 +99,10 @@ namespace tp_web
                 {
                     case 0: //caso exitoso
                         lblError.Visible = false;
-                        customer = new Customer();
                         customer.Document = int.Parse(txtDni.Text);  //aca asigno el dni ingresado
-                        searchDNI(customer.Document);
+                        customer.Id = searchDNI(customer.Document);
+                        ViewState["CustomerDocument"] = customer.Document; //necesario para que no se pierda este dato
+                        ViewState["CustomerId"] = customer.Id; //necesario para que no se pierda este dato
                         Wizard1.ActiveStepIndex = 3;
                         break;
                     case -1: //ingresaron caracter no numerico
@@ -134,10 +126,10 @@ namespace tp_web
 
         }
 
-        protected void searchDNI(int dni)
+        protected int searchDNI(int dni)
         {
             BusinessCustomer business = new BusinessCustomer();
-                customer = business.findCustomerByDNI(dni);
+            customer = business.findCustomerByDNI(dni);
             if (customer.Id > 0)
             {
                 txtName.Text = customer.Name;
@@ -146,6 +138,82 @@ namespace tp_web
                 txtAdress.Text = customer.Address;
                 txtCity.Text = customer.City;
                 txtCP.Text = customer.CP.ToString();
+            }
+            return customer.Id;
+        }
+
+        protected void btnSubmit_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                //aca van validaciones de los datos del cliente previo a inserta en la bd,
+                if (!FieldsValidation()) //solo si valida los campos conecto a la BD, sino, salgo de la funcion. AUN ESTA INCOMPLETA
+                {
+                    return;
+                }
+                else
+                {
+                    BusinessCustomer customerBusiness = new BusinessCustomer();
+                    BusinessVoucher voucherBusiness = new BusinessVoucher();
+
+                    voucher.Code = ViewState["VoucherCode"] as string; //recupero el codigo de voucher
+
+                    customer.Id = (int)ViewState["CustomerId"]; //recupero el id, si el usuario es nuevo, el id aca es -1 y debemos cambiarlo al nuevo id que se genere
+                    if (customer.Id == -1) //caso de usuario nuevo
+                    {
+                        customer.Document = (int)ViewState["CustomerDocument"]; //recupero el dni del viewState ya que es nuevo y aun no esta en la BD
+                        customer.Name = txtName.Text;
+                        customer.LastName = txtLastName.Text;
+                        customer.Email = txtEmail.Text;
+                        customer.Address = txtAdress.Text;
+                        customer.City = txtCity.Text;
+                        customer.CP = int.Parse(txtCP.Text);
+                        customer.Id = customerBusiness.AddCustomer(customer);
+                    }
+                    //si el usuario NO es nuevo debemos chequear si hubo cambios en la info y actualizar
+                    SelectedArticle = (int)ViewState["SelectedArticle"]; //recupero el articulo
+
+                    if (SelectedArticle == 3)
+                        voucherBusiness.ModifyVoucher(voucher.Code, customer.Id, DateTime.Now.Date, SelectedArticle);
+
+                    //informar que se canjeo el premio...
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private bool FieldsValidation()
+        {
+            lblError2.Visible = false;
+            switch (Model.Validation.onlyCP(txtCP.Text))  //valido el campo CP
+            {
+                case -1: //ingresaron caracter no numerico
+                    lblError2.Visible = true;
+                    lblError2.Text = "Only Numbers";
+                    break;
+                case -2: //el largo no es  el correcto
+                    lblError2.Visible = true;
+                    lblError2.Text = "CP must have between 4 and 8 digits long";
+                    break;
+                case -3: //inicia con 0
+                    lblError2.Visible = true;
+                    lblError2.Text = "CP cannot start with 0";
+                    break;
+            }
+
+            //ACA FALTAN LAS OTRAS VALIDACIONES PARA CADA CAMPO..
+
+            if (lblError2.Visible == true) //si hay un cartel de error visible entonces es porque no paso todas las validaciones, devuelvo false
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

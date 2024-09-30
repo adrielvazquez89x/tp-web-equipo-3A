@@ -118,8 +118,11 @@
                             </div>
                         </div>
 
+                    <div class="container mb-2">
+                        <asp:Label ID="lblError2" runat="server" Visible="false" CssClass="form-label"></asp:Label>
+                    </div>
 
-                        <%-- Submit --%>
+                    <%-- Submit --%>
                         <div class="container">
                             <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary w-100" OnClick="btnSubmit_Click" />
                         </div>

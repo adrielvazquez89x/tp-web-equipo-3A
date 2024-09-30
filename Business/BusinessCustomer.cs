@@ -48,7 +48,7 @@ namespace Business
         {
             try
             {
-                data.setQuery("SELECT C.Id, C.Documento, C.Nombre, C.Apellido, C.Email, C.Direccion, C.Ciudad, C.CP FROM Clientes C "+
+                data.setQuery("SELECT C.Id, C.Nombre, C.Apellido, C.Email, C.Direccion, C.Ciudad, C.CP FROM Clientes C "+
                               "WHERE C.Documento=@dni");
                 data.setParameter("@dni", dni);
                 data.executeRead();
@@ -56,8 +56,7 @@ namespace Business
                 Customer aux = new Customer();
                 if (data.Reader.Read())
                 {
-                    aux.Id = (int)data.Reader["Id"];
-                    aux.Document = (int)data.Reader["Documento"]; // o directamente le pongo =dni
+                    aux.Id = (int)data.Reader["Id"];                    
                     aux.Name = (string)data.Reader["Nombre"];
                     aux.LastName = (string)data.Reader["Apellido"];
                     aux.Email = (string)data.Reader["Email"];
@@ -69,6 +68,7 @@ namespace Business
                 {
                     aux.Id = -1;
                 }
+                aux.Document = dni;
                 return aux;
             }
             catch (Exception ex)
@@ -82,11 +82,11 @@ namespace Business
             }
         }
 
-        public void AddCustomer(Customer customer)
+        public int AddCustomer(Customer customer)
         {
             try
             {
-                data.setQuery("insert into Clientes Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP) OUTPUT INSERTED.Id values(@Dni, @Name, @LastName, @Email , @Adress, @city, @CP)");
+                data.setQuery("insert into Clientes (Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP) OUTPUT INSERTED.Id values(@Dni, @Name, @LastName, @Email , @Adress, @city, @CP)");
 
                 data.setParameter("@Dni", customer.Document);
                 data.setParameter("@Name", customer.Name);
@@ -98,6 +98,7 @@ namespace Business
                 
                 data.executeAction();
                 data.closeConnection();
+                return data.getIdEcalar();
             }
             catch (Exception ex)
             {
