@@ -14,6 +14,7 @@ namespace tp_web
     {
         public List<Article> ArtList { get; set; }
         public int SelectedArticle;
+        public Customer customer;
         protected void Page_Load(object sender, EventArgs e)
         {
             BusinessArticle busines = new BusinessArticle();
@@ -81,7 +82,15 @@ namespace tp_web
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-
+            BusinessCustomer business = new BusinessCustomer();
+            try
+            {
+                //validaciones
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         protected void btnPick_Click(object sender, EventArgs e)
@@ -93,22 +102,50 @@ namespace tp_web
 
         protected void btnNext_Click(object sender, EventArgs e)
         {
-            searchDNI(txtDni.Text);
-            Wizard1.ActiveStepIndex = 3;
+            try
+            {
+                switch (Model.Validation.onlyDNI(txtDni.Text))
+                {
+                    case 0: //caso exitoso
+                        lblError.Visible = false;
+                        customer = new Customer();
+                        customer.Document = int.Parse(txtDni.Text);  //aca asigno el dni ingresado
+                        searchDNI(customer.Document);
+                        Wizard1.ActiveStepIndex = 3;
+                        break;
+                    case -1: //ingresaron caracter no numerico
+                        lblError.Visible = true;
+                        lblError.Text = "Only Numbers";
+                        break;
+                    case -2: //el largo no es 8
+                        lblError.Visible = true;
+                        lblError.Text = "DNI must be exactly 8 digits long";
+                        break;
+                    case -3: //inicia con 0
+                        lblError.Visible = true;
+                        lblError.Text = "DNI cannot start with 0";
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
-        protected void searchDNI(string dni)
+        protected void searchDNI(int dni)
         {
             BusinessCustomer business = new BusinessCustomer();
-                Customer aux = business.findCustomerByDNI(dni);
-            if (aux.Id > 0)
+                customer = business.findCustomerByDNI(dni);
+            if (customer.Id > 0)
             {
-                txtName.Text = aux.Name;
-                txtLastName.Text = aux.LastName;
-                txtEmail.Text = aux.Email;
-                txtAdress.Text = aux.Address;
-                txtCity.Text = aux.City;
-                txtCP.Text = aux.CP.ToString();
+                txtName.Text = customer.Name;
+                txtLastName.Text = customer.LastName;
+                txtEmail.Text = customer.Email;
+                txtAdress.Text = customer.Address;
+                txtCity.Text = customer.City;
+                txtCP.Text = customer.CP.ToString();
             }
         }
     }

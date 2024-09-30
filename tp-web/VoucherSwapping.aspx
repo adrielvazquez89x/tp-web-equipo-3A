@@ -58,6 +58,9 @@
                             <asp:Label ID="lblDni" runat="server" Text="DNI" CssClass="form-label"></asp:Label>
                             <asp:TextBox ID="txtDni" runat="server" CssClass="form-control"></asp:TextBox>
                         </div>
+                        <div class="container mb-2">
+                            <asp:Label ID="lblError" runat="server" visible="false" CssClass="form-label"></asp:Label>
+                        </div>
                         <%-- Next --%>
                         <div class="container">
                             <asp:Button ID="btnNext" runat="server" Text="Next" CssClass="btn btn-primary w-100" onclick="btnNext_Click" />
@@ -136,9 +139,15 @@
             <%--<asp:Button ID="btnStepNext" runat="server" Text="Siguiente" CommandName="MoveNext" CssClass="btn btn-secondary" />--%>
         </StepNavigationTemplate>
 
+        <StepNavigationTemplate>
+            <asp:Button ID="btnStepPrevious" runat="server" Text="Previous" CommandName="MovePrevious" CssClass="btn btn-secondary" />
+            <%--<asp:Button ID="btnStepPrevious" runat="server" Text="Previous" CommandName="MovePrevious" CssClass="btn btn-secondary" />--%>
+        </StepNavigationTemplate>
+
         <FinishNavigationTemplate>
-            <asp:Button ID="btnFinishPrevious" runat="server" Text="Anterior" CommandName="MovePrevious" CssClass="btn btn-secondary" />
-            <asp:Button ID="btnFinish" runat="server" Text="Finalizar" CommandName="Finish" CssClass="btn btn-success" />
+            <asp:Button ID="btnStepPrevious" runat="server" Text="Previous" CommandName="MovePrevious" CssClass="btn btn-secondary" />
+            <%--<asp:Button ID="btnFinishPrevious" runat="server" Text="Anterior" CommandName="MovePrevious" CssClass="btn btn-secondary" />--%>
+            <%--<asp:Button ID="btnFinish" runat="server" Text="Finalizar" CommandName="Finish" CssClass="btn btn-success" />--%>
         </FinishNavigationTemplate>
     </asp:Wizard>
 

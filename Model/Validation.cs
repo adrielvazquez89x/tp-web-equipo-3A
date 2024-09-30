@@ -19,7 +19,7 @@ namespace Model
         //        return;
         //    }
         //}
-        public static bool onlyNumbers(string txt)
+        public static bool onlyPriceNumber(string txt)
         {
             int comma = 0;
             foreach (char ch in txt)
@@ -34,6 +34,21 @@ namespace Model
             }
             return true;
         }
+
+        public static int onlyDNI(string txt)
+        {
+            foreach (char ch in txt)
+            {
+                if (!(char.IsNumber(ch)))
+                        return -1;
+            }
+            if(txt.Length !=8) //el largo debe ser de 8 digitos para que corresponda con DNI
+                return -2;
+            if (txt[0] == '0')  // no puede iniciar en 0
+                return -3;
+            return 0;
+        }
+
         public static void onlyLetters(KeyPressEventArgs e)
         {
             if ((e.KeyChar >= 32 && e.KeyChar <= 64) || (e.KeyChar >= 123 && e.KeyChar <= 255))
@@ -58,7 +73,7 @@ namespace Model
                     MessageBox.Show("Please select a price to filter");
                     return false;
                 }
-                else if (!(Validation.onlyNumbers(txtAdvFilter.Text)))
+                else if (!(Validation.onlyPriceNumber(txtAdvFilter.Text)))
                 {
                     MessageBox.Show("Only numbers to filter by price");
                     return false;

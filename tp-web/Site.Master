@@ -59,7 +59,7 @@
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - Footer Low Cost</p>
+                <p>&copy; <%: DateTime.Now.Year %> - Grupo 3A</p>
             </footer>
         </div>
     </form>
