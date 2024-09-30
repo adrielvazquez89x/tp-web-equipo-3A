@@ -12,24 +12,26 @@ namespace tp_web
 {
     public partial class VoucherForm : System.Web.UI.Page
     {
-        public List<Article> ListaDeCosas;
+        public List<Article> ArtList { get; set; }
         public int SelectedArticle;
         protected void Page_Load(object sender, EventArgs e)
         {
-            ListaDeCosas = new List<Article>
-            {
-                new Article { Id = 1, Name = "Cosa 1", Description = "Descripcion de la cosa 1", Price = 100, UrlImages = new List<Model.Image>{ new Model.Image() } },
-                new Article { Id = 2, Name = "Cosa 2", Description = "Descripcion de la cosa 2", Price = 200, UrlImages = new List<Model.Image>{ new Model.Image() } },
-                new Article { Id = 3, Name = "Cosa 3", Description = "Descripcion de la cosa 3", Price = 300, UrlImages = new List<Model.Image>{ new Model.Image() } }
-            };
+            BusinessArticle busines = new BusinessArticle();
+            ArtList = busines.list();
+            //ArtList = new List<Article>
+            //{
+            //    new Article { Id = 1, Name = "Cosa 1", Description = "Descripcion de la cosa 1", Price = 100, UrlImages = new List<Model.Image>{ new Model.Image() } },
+            //    new Article { Id = 2, Name = "Cosa 2", Description = "Descripcion de la cosa 2", Price = 200, UrlImages = new List<Model.Image>{ new Model.Image() } },
+            //    new Article { Id = 3, Name = "Cosa 3", Description = "Descripcion de la cosa 3", Price = 300, UrlImages = new List<Model.Image>{ new Model.Image() } }
+            //};
 
-            ListaDeCosas[0].UrlImages[0].UrlImage = "https://st2.depositphotos.com/7691758/10586/i/450/depositphotos_105869850-stock-photo-ravioli-with-tomato-sauce-and.jpg";
-            ListaDeCosas[1].UrlImages[0].UrlImage = "https://media.minutouno.com/p/c5f011d97f01b34e511d0f8e3bb09cf0/adjuntos/150/imagenes/039/409/0039409544/ravioles.jpg";
-            ListaDeCosas[2].UrlImages[0].UrlImage = "https://www.cetraro.com.ar/wp-content/uploads/canelones-con-verdura.jpg";
+            //ArtList[0].UrlImages[0].UrlImage = "https://st2.depositphotos.com/7691758/10586/i/450/depositphotos_105869850-stock-photo-ravioli-with-tomato-sauce-and.jpg";
+            //ArtList[1].UrlImages[0].UrlImage = "https://media.minutouno.com/p/c5f011d97f01b34e511d0f8e3bb09cf0/adjuntos/150/imagenes/039/409/0039409544/ravioles.jpg";
+            //ArtList[2].UrlImages[0].UrlImage = "https://www.cetraro.com.ar/wp-content/uploads/canelones-con-verdura.jpg";
 
             if(!IsPostBack)
             {
-                rptListaDeCosas.DataSource = ListaDeCosas;
+                rptListaDeCosas.DataSource = ArtList;
                 rptListaDeCosas.DataBind();
             }
         }
@@ -72,7 +74,7 @@ namespace tp_web
             ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
         }
 
-        protected void Wizard1_NextButtonClick(object sender, WizardNavigationEventArgs e)
+        protected void Wizard1_NextButtonClick(object sender, WizardNavigationEventArgs e)  //esto no es necesario... o para que?
         {
 
         }
@@ -87,6 +89,27 @@ namespace tp_web
             SelectedArticle = int.Parse(((Button)sender).CommandArgument);
             consola.Text = "click: " + SelectedArticle;
             Wizard1.ActiveStepIndex = 2;
+        }
+
+        protected void btnNext_Click(object sender, EventArgs e)
+        {
+            searchDNI(txtDni.Text);
+            Wizard1.ActiveStepIndex = 3;
+        }
+
+        protected void searchDNI(string dni)
+        {
+            BusinessCustomer business = new BusinessCustomer();
+                Customer aux = business.findCustomerByDNI(dni);
+            if (aux.Id > 0)
+            {
+                txtName.Text = aux.Name;
+                txtLastName.Text = aux.LastName;
+                txtEmail.Text = aux.Email;
+                txtAdress.Text = aux.Address;
+                txtCity.Text = aux.City;
+                txtCP.Text = aux.CP.ToString();
+            }
         }
     }
 }

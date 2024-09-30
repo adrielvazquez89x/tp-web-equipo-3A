@@ -58,7 +58,19 @@
                             <asp:Label ID="lblDni" runat="server" Text="DNI" CssClass="form-label"></asp:Label>
                             <asp:TextBox ID="txtDni" runat="server" CssClass="form-control"></asp:TextBox>
                         </div>
+                        <%-- Next --%>
+                        <div class="container">
+                            <asp:Button ID="btnNext" runat="server" Text="Next" CssClass="btn btn-primary w-100" onclick="btnNext_Click" />
+                        </div>
+                    </div>
 
+                </ContentTemplate>
+            </asp:WizardStep>
+
+
+            <asp:WizardStep ID="WizardStep4" runat="server" Title="Step 4">
+                <contentTemplate>
+                    
                         <%-- Name, lastname, email --%>
                         <div class="container">
                             <div class="row mb-2">
@@ -109,9 +121,9 @@
                             <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary w-100" OnClick="btnSubmit_Click" />
                         </div>
                     </div>
-                </ContentTemplate>
-            </asp:WizardStep>
 
+                </contentTemplate>
+            </asp:WizardStep>
 
         </WizardSteps>
 
