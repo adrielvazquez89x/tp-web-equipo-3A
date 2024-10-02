@@ -48,9 +48,11 @@ namespace tp_web
                 {
                     string code = txtVoucherCode.Text;
                     voucher = business.getVoucherByCode(code);
+
                     if (voucher.IDClient == -1)
                     {
-                        ShowErrorAndRedirect("There is no voucher with that code");
+                        Session["error"] = "There is no voucher with that code.";
+                        Response.Redirect("Error.aspx");
                     }
                     else
                     {
@@ -61,9 +63,15 @@ namespace tp_web
                         }
                         else
                         {
-                            ShowErrorAndRedirect("The voucher you entered has already been used");
+                            Session["error"] = "The voucher you entered has already been used.";
+                            Response.Redirect("Error.aspx"); 
                         }
                     }
+                }
+                else
+                {
+                    Session["error"] = "The voucher code field cannot be empty.";
+                    Response.Redirect("Error.aspx");
                 }
             }
             catch (Exception ex)
@@ -72,11 +80,11 @@ namespace tp_web
             }
         }
 
-        private void ShowErrorAndRedirect(string script)
-        {
-            script = "alert('" + script + "'); window.location.href='Default.aspx';";
-            ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
-        }
+        //private void ShowErrorAndRedirect(string script)
+        //{
+        //    script = "alert('" + script + "'); window.location.href='Default.aspx';";
+        //    ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
+        //}
 
         protected void Wizard1_NextButtonClick(object sender, WizardNavigationEventArgs e)  //esto no es necesario... o para que?
         {
@@ -174,8 +182,9 @@ namespace tp_web
                     //si el usuario NO es nuevo debemos chequear si hubo cambios en la info y actualizar
                     SelectedArticle = (int)ViewState["SelectedArticle"]; //recupero el articulo
 
-                    if (SelectedArticle == 3)
                         voucherBusiness.ModifyVoucher(voucher.Code, customer.Id, DateTime.Now.Date, SelectedArticle);
+
+                        consola.Text += " Voucher canjeado exitosamente.";
 
                     //informar que se canjeo el premio...
                 }

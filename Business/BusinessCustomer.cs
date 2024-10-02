@@ -86,18 +86,19 @@ namespace Business
         {
             try
             {
-                data.setQuery("insert into Clientes (Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP) OUTPUT INSERTED.Id values(@Dni, @Name, @LastName, @Email , @Adress, @city, @CP)");
+                data.clearParams();
+                data.setQuery("insert into Clientes (Documento, Nombre, Apellido, Email, Direccion, Ciudad, CP) OUTPUT INSERTED.Id values(@Dni, @Name, @LastName, @Email , @Adress, @City, @CP)");
 
                 data.setParameter("@Dni", customer.Document);
                 data.setParameter("@Name", customer.Name);
                 data.setParameter("@LastName", customer.LastName);
                 data.setParameter("@Email", customer.Email);
                 data.setParameter("@Adress", customer.Address);
-                data.setParameter("@city", customer.City);
+                data.setParameter("@City", customer.City);
                 data.setParameter("@CP", customer.CP);
                 
-                data.executeAction();
-                data.closeConnection();
+               // data.executeAction();
+               // data.closeConnection();
                 return data.getIdEcalar();
             }
             catch (Exception ex)
@@ -136,6 +137,7 @@ namespace Business
                 data.closeConnection();
             }
         }
+
 
     }
 }

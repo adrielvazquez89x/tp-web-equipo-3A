@@ -123,6 +123,7 @@ namespace Business
             DataAccess data = new DataAccess();
             try
             {
+                data.clearParams();
                 data.setQuery("update Vouchers set IdCliente=@idCustomer, FechaCanje=@date, IdArticulo=@idArt where CodigoVoucher=@code");
                 data.setParameter("@idCustomer", idCustomer);
                 data.setParameter("@date", date);
@@ -130,7 +131,7 @@ namespace Business
                 data.setParameter("@code", code);
 
                 data.executeAction();
-                data.closeConnection();
+               // data.closeConnection();
             }
             catch (Exception ex)
             {
