@@ -12,19 +12,22 @@ namespace Business
 {
     public class BusinessVoucher
     {
-        public void AddVaucher()
+        public string AddVaucher()
         {
             DataAccess data = new DataAccess();
+            string newCode = string.Empty;
 
             try
             {
                 string lastCode = GetLastCode(); //y si no hay ninguno?
-                string newCode = GenerateCode(lastCode);
+                newCode = GenerateCode(lastCode);
 
                 data.setQuery("Insert into Vouchers (CodigoVoucher) Values (@newCode)");
                 data.setParameter("@newCode", newCode);
 
                 data.executeAction();
+
+                return newCode;
             }
             catch (Exception ex)
             {

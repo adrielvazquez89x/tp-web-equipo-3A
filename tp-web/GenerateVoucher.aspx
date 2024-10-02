@@ -19,7 +19,22 @@
                         <asp:Button ID="btnGenerateVoucher" runat="server" CssClass="btn btn-primary btn-lg w-100" OnClick="btnGenerateVoucher_Click" Text="Generar Voucher" />
 
                         <!-- Toastie -->
-                        <div class="toast-container position-fixed top-0 end-0 p-5">
+                        <div class="card mt-4" id="voucherCard" runat="server" style="display: none;">
+                            <div class="card-body">
+                                <h5 class="card-title">Voucher</h5>
+                                <p class="card-text">
+                                    <asp:Label> Codigo: </asp:Label>
+                                    <asp:Literal ID="ltlVoucherCode" runat="server" />
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="text-center mt-3">
+                            <asp:Button ID="btnGoToSwapping" runat="server" CssClass="btn btn-secondary" Text="Ir a Swapping" OnClick="btnGoToSwapping_Click" Visible="false" />
+                        </div>
+
+                        <%-- <div class="toast-container position-fixed top-0 end-0 p-5">
                             <div id="toastMessage" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
                                 <div class="d-flex">
                                     <div class="toast-body">
@@ -28,7 +43,7 @@
                                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                                 </div>
                             </div>
-                        </div>
+                        </div>--%>
                     </ContentTemplate>
                 </asp:UpdatePanel>
             </div>
