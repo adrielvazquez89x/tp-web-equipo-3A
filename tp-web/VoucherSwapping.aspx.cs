@@ -225,5 +225,10 @@ namespace tp_web
                 return true;
             }
         }
+
+        protected void chkAgree_CheckedChanged(object sender, EventArgs e)
+        {
+            btnSubmit.Enabled = chkAgree.Checked;
+        }
     }
 }
