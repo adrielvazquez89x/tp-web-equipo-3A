@@ -186,6 +186,8 @@ namespace tp_web
 
                         consola.Text += " Voucher canjeado exitosamente.";
 
+
+                    Response.Redirect("Success.aspx");
                     //informar que se canjeo el premio...
                 }
             }
