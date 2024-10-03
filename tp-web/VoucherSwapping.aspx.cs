@@ -64,7 +64,7 @@ namespace tp_web
                         else
                         {
                             Session["error"] = "The voucher you entered has already been used.";
-                            Response.Redirect("Error.aspx"); 
+                            Response.Redirect("Error.aspx");
                         }
                     }
                 }
@@ -182,13 +182,18 @@ namespace tp_web
                     //si el usuario NO es nuevo debemos chequear si hubo cambios en la info y actualizar
                     SelectedArticle = (int)ViewState["SelectedArticle"]; //recupero el articulo
 
-                        voucherBusiness.ModifyVoucher(voucher.Code, customer.Id, DateTime.Now.Date, SelectedArticle);
+                    voucherBusiness.ModifyVoucher(voucher.Code, customer.Id, DateTime.Now.Date, SelectedArticle);
 
-                        consola.Text += " Voucher canjeado exitosamente.";
+                    //si pongo un mail que ya existe me da error 
 
+                    EmailService emailService = new EmailService();
+                    string subject = "Confirmación de participación";
+                    string body = $"¡Gracias por participar! Has elegido el premio: {SelectedArticle}.";
+                    emailService.createMail(customer.Email, subject, body);
+                    emailService.sendEmail();
 
                     Response.Redirect("Success.aspx");
-                    //informar que se canjeo el premio...
+
                 }
             }
             catch (Exception ex)
