@@ -78,17 +78,26 @@
                                 <asp:Label ID="lblName" runat="server" Text="Name" CssClass="form-label"></asp:Label>
                                 <asp:TextBox ID="txtName" runat="server" CssClass="form-control"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvName" runat="server" ControlToValidate="txtName" ErrorMessage="Name is required." CssClass="text-danger" Display="Dynamic"></asp:RequiredFieldValidator>
+                                <div class="container mb-2">
+                                    <asp:Label ID="lblErrorName" runat="server" Visible="false" CssClass="form-label text-danger"></asp:Label>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <asp:Label ID="lblLastName" runat="server" Text="Last Name" CssClass="form-label"></asp:Label>
                                 <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvLastName" runat="server" ControlToValidate="txtLastName" ErrorMessage="Last Name is required." CssClass="text-danger" Display="Dynamic"></asp:RequiredFieldValidator>
+                                <div class="container mb-2">
+                                    <asp:Label ID="lblErrorLastName" runat="server" Visible="false" CssClass="form-label text-danger"></asp:Label>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <asp:Label ID="lblEmail" runat="server" Text="Email" CssClass="form-label"></asp:Label>
                                 <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail" ErrorMessage="Email is required." CssClass="text-danger" Display="Dynamic"></asp:RequiredFieldValidator>
                                 <asp:RegularExpressionValidator ID="revEmail" runat="server" ControlToValidate="txtEmail" ErrorMessage="Invalid email format." CssClass="text-danger" ValidationExpression="^[^@\s]+@[^@\s]+\.[^@\s]+$" Display="Dynamic"></asp:RegularExpressionValidator>
+                                <div class="container mb-2">
+                                    <asp:Label ID="lblErrorEmail" runat="server" Visible="false" CssClass="form-label text-danger"></asp:Label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -100,17 +109,27 @@
                                 <asp:Label ID="lblAdress" runat="server" Text="Address" CssClass="form-label"></asp:Label>
                                 <asp:TextBox ID="txtAdress" runat="server" CssClass="form-control"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvAdress" runat="server" ControlToValidate="txtAdress" ErrorMessage="Address is required." CssClass="text-danger" Display="Dynamic"></asp:RequiredFieldValidator>
+                                <div class="container mb-2">
+                                    <asp:Label ID="lblErrorAdress" runat="server" Visible="false" CssClass="form-label text-danger"></asp:Label>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <asp:Label ID="lblCity" runat="server" Text="City" CssClass="form-label"></asp:Label>
                                 <asp:TextBox ID="txtCity" runat="server" CssClass="form-control"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvCity" runat="server" ControlToValidate="txtCity" ErrorMessage="City is required." CssClass="text-danger" Display="Dynamic"></asp:RequiredFieldValidator>
+                                <div class="container mb-2">
+                                    <asp:Label ID="lblErrorCity" runat="server" Visible="false" CssClass="form-label text-danger"></asp:Label>
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <asp:Label ID="lblCP" runat="server" Text="Postal Code" CssClass="form-label"></asp:Label>
                                 <asp:TextBox ID="txtCP" runat="server" CssClass="form-control"></asp:TextBox>
                                 <asp:RequiredFieldValidator ID="rfvCP" runat="server" ControlToValidate="txtCP" ErrorMessage="Postal Code is required." CssClass="text-danger" Display="Dynamic"></asp:RequiredFieldValidator>
+                                <div class="container mb-2">
+                                    <asp:Label ID="lblErrorCP" runat="server" Visible="false" CssClass="form-label text-danger"></asp:Label>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -122,9 +141,7 @@
                         </div>
                     </div>
 
-                    <div class="container mb-2">
-                        <asp:Label ID="lblError2" runat="server" Visible="false" CssClass="form-label"></asp:Label>
-                    </div>
+
 
                     <%-- Submit --%>
                     <div class="container">

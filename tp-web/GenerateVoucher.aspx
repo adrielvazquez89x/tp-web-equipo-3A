@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="col-12">
-                <h1 class="text-center mb-4">Generar nuevo voucher</h1>
+                <h1 class="text-center mb-4">Generate new voucher</h1>
             </div>
         </div>
 
@@ -16,14 +16,14 @@
             <div class="col-4 text-center">
                 <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                     <ContentTemplate>
-                        <asp:Button ID="btnGenerateVoucher" runat="server" CssClass="btn btn-primary btn-lg w-100" OnClick="btnGenerateVoucher_Click" Text="Generar Voucher" />
+                        <asp:Button ID="btnGenerateVoucher" runat="server" CssClass="btn btn-primary btn-lg w-100" OnClick="btnGenerateVoucher_Click" Text="Create" />
 
                         <!-- Toastie -->
                         <div class="card mt-4" id="voucherCard" runat="server" style="display: none;">
                             <div class="card-body">
                                 <h5 class="card-title">Voucher</h5>
                                 <p class="card-text">
-                                    <asp:Label> Codigo: </asp:Label>
+                                    <asp:Label> Code: </asp:Label>
                                     <asp:Literal ID="ltlVoucherCode" runat="server" />
                                 </p>
                             </div>
@@ -31,7 +31,7 @@
 
 
                         <div class="text-center mt-3">
-                            <asp:Button ID="btnGoToSwapping" runat="server" CssClass="btn btn-secondary" Text="Ir a Swapping" OnClick="btnGoToSwapping_Click" Visible="false" />
+                            <asp:Button ID="btnGoToSwapping" runat="server" CssClass="btn btn-secondary" Text="Go to Swapping" OnClick="btnGoToSwapping_Click" Visible="false" />
                         </div>
 
                         <%-- <div class="toast-container position-fixed top-0 end-0 p-5">

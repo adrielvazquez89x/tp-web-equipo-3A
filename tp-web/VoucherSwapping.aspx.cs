@@ -20,17 +20,6 @@ namespace tp_web
         {
             BusinessArticle busines = new BusinessArticle();
             ArtList = busines.list();
-            //ArtList = new List<Article>
-            //{
-            //    new Article { Id = 1, Name = "Cosa 1", Description = "Descripcion de la cosa 1", Price = 100, UrlImages = new List<Model.Image>{ new Model.Image() } },
-            //    new Article { Id = 2, Name = "Cosa 2", Description = "Descripcion de la cosa 2", Price = 200, UrlImages = new List<Model.Image>{ new Model.Image() } },
-            //    new Article { Id = 3, Name = "Cosa 3", Description = "Descripcion de la cosa 3", Price = 300, UrlImages = new List<Model.Image>{ new Model.Image() } }
-            //};
-
-            //ArtList[0].UrlImages[0].UrlImage = "https://st2.depositphotos.com/7691758/10586/i/450/depositphotos_105869850-stock-photo-ravioli-with-tomato-sauce-and.jpg";
-            //ArtList[1].UrlImages[0].UrlImage = "https://media.minutouno.com/p/c5f011d97f01b34e511d0f8e3bb09cf0/adjuntos/150/imagenes/039/409/0039409544/ravioles.jpg";
-            //ArtList[2].UrlImages[0].UrlImage = "https://www.cetraro.com.ar/wp-content/uploads/canelones-con-verdura.jpg";
-
             if (!IsPostBack)
             {
                 rptListaDeCosas.DataSource = ArtList;
@@ -58,7 +47,7 @@ namespace tp_web
                     {
                         if (voucher.DateExchange.Year == 1)
                         {
-                            ViewState["VoucherCode"] = voucher.Code; //necesario para que no se pierda este dato
+                            Session["VoucherCode"] = voucher.Code;
                             Wizard1.ActiveStepIndex = 1;
                         }
                         else
@@ -80,11 +69,6 @@ namespace tp_web
             }
         }
 
-        //private void ShowErrorAndRedirect(string script)
-        //{
-        //    script = "alert('" + script + "'); window.location.href='Default.aspx';";
-        //    ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
-        //}
 
         protected void Wizard1_NextButtonClick(object sender, WizardNavigationEventArgs e)  //esto no es necesario... o para que?
         {
@@ -95,7 +79,7 @@ namespace tp_web
         {
             SelectedArticle = int.Parse(((Button)sender).CommandArgument);
             consola.Text = "click: " + SelectedArticle;
-            ViewState["SelectedArticle"] = SelectedArticle; //necesario para que no se pierda este dato
+            Session["SelectedArticle"] = SelectedArticle;
             Wizard1.ActiveStepIndex = 2;
         }
 
@@ -103,14 +87,14 @@ namespace tp_web
         {
             try
             {
-                switch (Model.Validation.onlyDNI(txtDni.Text))
+                switch (Model.Validation.OnlyDNI(txtDni.Text))
                 {
                     case 0: //caso exitoso
                         lblError.Visible = false;
-                        customer.Document = int.Parse(txtDni.Text);  //aca asigno el dni ingresado
+                        customer.Document = int.Parse(txtDni.Text);
                         customer.Id = searchDNI(customer.Document);
-                        ViewState["CustomerDocument"] = customer.Document; //necesario para que no se pierda este dato
-                        ViewState["CustomerId"] = customer.Id; //necesario para que no se pierda este dato
+                        Session["CustomerDocument"] = customer.Document; 
+                        Session["CustomerId"] = customer.Id;
                         Wizard1.ActiveStepIndex = 3;
                         break;
                     case -1: //ingresaron caracter no numerico
@@ -165,12 +149,12 @@ namespace tp_web
                     BusinessCustomer customerBusiness = new BusinessCustomer();
                     BusinessVoucher voucherBusiness = new BusinessVoucher();
 
-                    voucher.Code = ViewState["VoucherCode"] as string; //recupero el codigo de voucher
+                    voucher.Code = Session["VoucherCode"].ToString();
 
-                    customer.Id = (int)ViewState["CustomerId"]; //recupero el id, si el usuario es nuevo, el id aca es -1 y debemos cambiarlo al nuevo id que se genere
+                    customer.Id = (int)Session["CustomerId"]; //si el usuario es nuevo, el id aca es -1 y debemos cambiarlo al nuevo id que se genere
                     if (customer.Id == -1) //caso de usuario nuevo
                     {
-                        customer.Document = (int)ViewState["CustomerDocument"]; //recupero el dni del viewState ya que es nuevo y aun no esta en la BD
+                        customer.Document = (int)Session["CustomerDocument"];
                         customer.Name = txtName.Text;
                         customer.LastName = txtLastName.Text;
                         customer.Email = txtEmail.Text;
@@ -180,7 +164,7 @@ namespace tp_web
                         customer.Id = customerBusiness.AddCustomer(customer);
                     }
                     //si el usuario NO es nuevo debemos chequear si hubo cambios en la info y actualizar
-                    SelectedArticle = (int)ViewState["SelectedArticle"]; //recupero el articulo
+                    SelectedArticle = (int)Session["SelectedArticle"]; //recupero el articulo
 
                     voucherBusiness.ModifyVoucher(voucher.Code, customer.Id, DateTime.Now.Date, SelectedArticle);
 
@@ -204,26 +188,80 @@ namespace tp_web
 
         private bool FieldsValidation()
         {
-            lblError2.Visible = false;
-            switch (Model.Validation.onlyCP(txtCP.Text))  //valido el campo CP
+            lblErrorName.Visible=lblErrorLastName.Visible=lblErrorCity.Visible=lblErrorAdress.Visible=lblErrorCP.Visible = false;
+            switch (Model.Validation.OnlyCP(txtCP.Text)) 
             {
                 case -1: //ingresaron caracter no numerico
-                    lblError2.Visible = true;
-                    lblError2.Text = "Only Numbers";
+                    lblErrorCP.Visible = true;
+                    lblErrorCP.Text = "Only Numbers";
                     break;
                 case -2: //el largo no es  el correcto
-                    lblError2.Visible = true;
-                    lblError2.Text = "CP must have between 4 and 8 digits long";
+                    lblErrorCP.Visible = true;
+                    lblErrorCP.Text = "CP must have between 4 and 8 digits long";
                     break;
                 case -3: //inicia con 0
-                    lblError2.Visible = true;
-                    lblError2.Text = "CP cannot start with 0";
+                    lblErrorCP.Visible = true;
+                    lblErrorCP.Text = "CP cannot start with 0";
                     break;
             }
+            switch (Model.Validation.OnlyLetters(txtName.Text, txtName.Text.Length))
+            {
+                case -1: //ingresaron caracter que no es letra
+                    lblErrorName.Visible = true;
+                    lblErrorName.Text = "Only Letters";
+                    break;
+                case -2: //el largo no es  el correcto
+                    lblErrorName.Visible = true;
+                    lblErrorName.Text = "Min Length 3, Max length 50";
+                    break;
+            }
+            switch (Model.Validation.OnlyLetters(txtLastName.Text, txtLastName.Text.Length))
+            {
+                case -1: //ingresaron caracter que no es letra
+                    lblErrorLastName.Visible = true;
+                    lblErrorLastName.Text = "Only Letters";
+                    break;
+                case -2: //el largo no es  el correcto
+                    lblErrorLastName.Visible = true;
+                    lblErrorLastName.Text = "Min Length 3, Max length 50";
+                    break;
+            }
+            switch (Model.Validation.NumbersAndLetters(txtCity.Text, txtCity.Text.Length))
+            {
+                case -1: //ingresaron caracter que no es letra
+                    lblErrorCity.Visible = true;
+                    lblErrorCity.Text = "No symbols or puntuaction";
+                    break;
 
-            //ACA FALTAN LAS OTRAS VALIDACIONES PARA CADA CAMPO..
+                    ///validar que no sean solo nros
+                    ///
+                case -2: //el largo no es  el correcto
+                    lblErrorCity.Visible = true;
+                    lblErrorCity.Text = "Min Length 3, Max length 50";
+                    break;
+                case -3: //no hay 3 letras
+                    lblErrorCity.Visible = true;
+                    lblErrorCity.Text = "At least 3 non-numeric characters";
+                    break;
+            }
+            switch (Model.Validation.NumbersAndLetters(txtAdress.Text, txtAdress.Text.Length))
+            {
+                case -1: //ingresaron caracter que no es letra
+                    lblErrorAdress.Visible = true;
+                    lblErrorAdress.Text = "No symbols or puntuaction";
+                    break;
+                case -2: //el largo no es  el correcto
+                    lblErrorAdress.Visible = true;
+                    lblErrorAdress.Text = "Min Length 3, Max length 50";
+                    break;
+                case -3: //no hay 3 letras
+                    lblErrorAdress.Visible = true;
+                    lblErrorAdress.Text = "At least 3 non-numeric characters";
+                    break;
+            }
+            //validacion para email necesitamos?..
 
-            if (lblError2.Visible == true) //si hay un cartel de error visible entonces es porque no paso todas las validaciones, devuelvo false
+            if (lblErrorName.Visible || lblErrorLastName.Visible || lblErrorCity.Visible || lblErrorAdress.Visible || lblErrorCP.Visible) //si hay un cartel de error visible entonces es porque no paso todas las validaciones, devuelvo false
             {
                 return false;
             }
