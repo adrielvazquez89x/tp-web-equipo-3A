@@ -14,9 +14,14 @@ namespace tp_web
     {
         public List<Article> ArtList { get; set; }
         public List<Model.Image> ImageList { get; set; }
+
         public int SelectedArticle;
+
         public Customer customer = new Customer();
+
         public Voucher voucher = new Voucher();
+
+        public bool IsUserExists;
         protected void Page_Load(object sender, EventArgs e)
         {
             BusinessArticle busines = new BusinessArticle();
@@ -24,7 +29,7 @@ namespace tp_web
             ArtList = busines.list();
             if (!IsPostBack)
             {
-                for(int i=0; i < ArtList.Count; i++)
+                for (int i = 0; i < ArtList.Count; i++)
                 {
                     Article aux = ArtList[i];
                     aux.UrlImages = businessImage.list(aux.Id);
@@ -110,7 +115,7 @@ namespace tp_web
                         lblError.Visible = false;
                         customer.Document = int.Parse(txtDni.Text);
                         customer.Id = searchDNI(customer.Document);
-                        Session["CustomerDocument"] = customer.Document; 
+                        Session["CustomerDocument"] = customer.Document;
                         Session["CustomerId"] = customer.Id;
                         Wizard1.ActiveStepIndex = 3;
                         break;
@@ -168,18 +173,32 @@ namespace tp_web
 
                     voucher.Code = Session["VoucherCode"].ToString();
 
-                    customer.Id = (int)Session["CustomerId"]; //si el usuario es nuevo, el id aca es -1 y debemos cambiarlo al nuevo id que se genere
-                    if (customer.Id == -1) //caso de usuario nuevo
+                    customer.Id = (int)Session["CustomerId"];
+                    //si el usuario es nuevo, el id aca es -1 y debemos cambiarlo al nuevo id que se genere
+                    //if (customer.Id == -1) //caso de usuario nuevo
+                    //{
+                    //    IsUserExists = false;
+                    //}
+
+                    IsUserExists = customer.Id == -1 ? false : true;
+
+                    customer.Document = (int)Session["CustomerDocument"];
+                    customer.Name = txtName.Text;
+                    customer.LastName = txtLastName.Text;
+                    customer.Email = txtEmail.Text;
+                    customer.Address = txtAdress.Text;
+                    customer.City = txtCity.Text;
+                    customer.CP = int.Parse(txtCP.Text);
+
+                    if (IsUserExists)
                     {
-                        customer.Document = (int)Session["CustomerDocument"];
-                        customer.Name = txtName.Text;
-                        customer.LastName = txtLastName.Text;
-                        customer.Email = txtEmail.Text;
-                        customer.Address = txtAdress.Text;
-                        customer.City = txtCity.Text;
-                        customer.CP = int.Parse(txtCP.Text);
+                        customerBusiness.modifyCustomer(customer);
+                    }
+                    else
+                    {
                         customer.Id = customerBusiness.AddCustomer(customer);
                     }
+                    
                     //si el usuario NO es nuevo debemos chequear si hubo cambios en la info y actualizar
                     SelectedArticle = (int)Session["SelectedArticle"]; //recupero el articulo
 
@@ -205,8 +224,8 @@ namespace tp_web
 
         private bool FieldsValidation()
         {
-            lblErrorName.Visible=lblErrorLastName.Visible=lblErrorCity.Visible=lblErrorAdress.Visible=lblErrorCP.Visible = false;
-            switch (Model.Validation.OnlyCP(txtCP.Text)) 
+            lblErrorName.Visible = lblErrorLastName.Visible = lblErrorCity.Visible = lblErrorAdress.Visible = lblErrorCP.Visible = false;
+            switch (Model.Validation.OnlyCP(txtCP.Text))
             {
                 case -1: //ingresaron caracter no numerico
                     lblErrorCP.Visible = true;
@@ -250,8 +269,8 @@ namespace tp_web
                     lblErrorCity.Text = "No symbols or puntuaction";
                     break;
 
-                    ///validar que no sean solo nros
-                    ///
+                ///validar que no sean solo nros
+                ///
                 case -2: //el largo no es  el correcto
                     lblErrorCity.Visible = true;
                     lblErrorCity.Text = "Min Length 3, Max length 50";

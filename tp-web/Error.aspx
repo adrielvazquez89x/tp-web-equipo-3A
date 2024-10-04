@@ -1,9 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Error.aspx.cs" Inherits="tp_web.Error" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-</asp:Content>
-<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="text-center mt-5">
+        <div class="text-center mt-5">
         <h2>
             <asp:Label Text="" ID="lblError" runat="server" />
         </h2>

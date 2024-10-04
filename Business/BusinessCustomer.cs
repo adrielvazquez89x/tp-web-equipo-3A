@@ -115,12 +115,12 @@ namespace Business
         {
             try
             {
-                data.setQuery("update Clientes set Nombre=@Name, Apellido=@LastName, Email=@Email, Adress=@Adress, City=@City, CP=@CP where Id=@Id");
+                data.setQuery("update Clientes set Nombre=@Name, Apellido=@LastName, Email=@Email, Direccion=@Address, Ciudad=@City, CP=@CP where Id=@Id");
                 
                 data.setParameter("@Name", customer.Name);
                 data.setParameter("@LastName", customer.LastName);
                 data.setParameter("@Email", customer.Email);
-                data.setParameter("@Adress", customer.Address);
+                data.setParameter("@Address", customer.Address);
                 data.setParameter("@City", customer.City);
                 data.setParameter("@CP", customer.CP);
                 data.setParameter("@Id", customer.Id);
