@@ -1,19 +1,20 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="VoucherSwapping.aspx.cs" Inherits="tp_web.VoucherForm" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <asp:Label ID="consola" runat="server" Text="Label"></asp:Label>
     <asp:Wizard ID="Wizard1" runat="server" DisplaySideBar="False" ActiveStepIndex="0" OnNextButtonClick="Wizard1_NextButtonClick">
         <WizardSteps>
             <%-- Validación del código --%>
             <asp:WizardStep ID="WizardStep1" runat="server" Title="Step 1">
                 <contenttemplate>
-                    <h2>Welcome!</h2>
-                    <div class="mb-3">
-                        <label for="txtVoucherCode" class="form-label">Voucher Code:</label>
-                        <asp:TextBox runat="server" CssClass="form-control" ID="txtVoucherCode" />
+                    <div class="container text-center mt-5">
+                        <h2 class="display-4 text-primary">Welcome!</h2>
+                        <div class="mb-3">
+                            <label for="txtVoucherCode" class="form-label">Voucher Code:</label>
+                            <asp:TextBox runat="server" CssClass="form-control" ID="txtVoucherCode" />
+                        </div>
+                        <asp:Label ID="lblVoucherError" runat="server" Text="" ForeColor="Red" />
+                        <asp:Button Text="Swapping" CssClass="btn btn-primary" OnClick="btnSwap_Click" ID="btnSwap" runat="server" />
                     </div>
-                    <asp:Label ID="lblVoucherError" runat="server" Text="" ForeColor="Red" />
-                    <asp:Button Text="Swapping" CssClass="btn btn-primary" OnClick="btnSwap_Click" ID="btnSwap" runat="server" />
                 </contenttemplate>
             </asp:WizardStep>
 

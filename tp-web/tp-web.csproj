@@ -129,7 +129,7 @@
     <Content Include="favicon.ico" />
     <Content Include="GenerateVoucher.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="PasoTres.aspx" />
+    <Content Include="Img\Logo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -185,7 +185,6 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
-    <Content Include="PasoDos.aspx" />
     <Content Include="Site.Master" />
     <Content Include="Success.aspx" />
     <Content Include="ViewSwitcher.ascx" />
@@ -221,21 +220,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="PasoTres.aspx.cs">
-      <DependentUpon>PasoTres.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PasoTres.aspx.designer.cs">
-      <DependentUpon>PasoTres.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PasoDos.aspx.cs">
-      <DependentUpon>PasoDos.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="PasoDos.aspx.designer.cs">
-      <DependentUpon>PasoDos.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

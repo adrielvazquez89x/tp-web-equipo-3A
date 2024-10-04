@@ -96,7 +96,6 @@ namespace tp_web
         protected void btnPick_Click(object sender, EventArgs e)
         {
             SelectedArticle = int.Parse(((Button)sender).CommandArgument);
-            consola.Text = "click: " + SelectedArticle;
             Session["SelectedArticle"] = SelectedArticle;
             Wizard1.ActiveStepIndex = 2;
         }

@@ -14,9 +14,7 @@
     </asp:PlaceHolder>
 
     <webopt:bundlereference runat="server" path="~/Content/css" />
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
-</head>
+    <link href="Img/Logo.png" rel="shortcut icon" type="image/png" /></head>
 <body>
     <form runat="server">
         <asp:ScriptManager runat="server">
@@ -40,15 +38,16 @@
 
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">Canje de Vouchers</a>
+                <a class="navbar-brand" runat="server" href="~/">
+                    <img src="Img/Logo.png" alt="Logo" style="height: 40px;" />
+                </a>
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar navegación" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/GenerateVoucher">Generacion de Vouchers</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/GenerateVoucher">Generate Vouchers</a></li>
                         <li class="nav-item"><a class="nav-link" runat="server" href="~/VoucherSwapping">Vouchers Swapping</a></li>
                     </ul>
                 </div>
@@ -56,15 +55,7 @@
         </nav>
 
         <div class="container">
-                <div>
-                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-                    </asp:ContentPlaceHolder>
-
-                </div>
-
-            </div>
-
-
+        
         <div class="container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>

@@ -18,7 +18,7 @@ namespace tp_web
             }
             else
             {
-                lblError.Text = "Ocurrió un error desconocido.";
+                lblError.Text = "Unexpected error.";
             }
         }
 

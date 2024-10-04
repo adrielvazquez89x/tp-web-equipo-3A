@@ -13,7 +13,6 @@ namespace tp_web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            btnGenerateVoucher.Text = "Generar Voucher";
             BusinessVoucher business = new BusinessVoucher();
 
             string nuevo = business.GetLastCode();
