@@ -13,20 +13,38 @@ namespace tp_web
     public partial class VoucherForm : System.Web.UI.Page
     {
         public List<Article> ArtList { get; set; }
+        public List<Model.Image> ImageList { get; set; }
         public int SelectedArticle;
         public Customer customer = new Customer();
         public Voucher voucher = new Voucher();
         protected void Page_Load(object sender, EventArgs e)
         {
             BusinessArticle busines = new BusinessArticle();
+            BusinessImage businessImage = new BusinessImage();
             ArtList = busines.list();
             if (!IsPostBack)
             {
+                for(int i=0; i < ArtList.Count; i++)
+                {
+                    Article aux = ArtList[i];
+                    aux.UrlImages = businessImage.list(aux.Id);
+                }
                 rptListaDeCosas.DataSource = ArtList;
                 rptListaDeCosas.DataBind();
             }
+
         }
 
+        protected void rptListaDeCosas_ItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+            {
+                Article currentArticle = (Article)e.Item.DataItem;
+                Repeater rptImagesList = (Repeater)e.Item.FindControl("rptImagesList"); // Toma el Repeater anidado
+                rptImagesList.DataSource = currentArticle.UrlImages;
+                rptImagesList.DataBind();
+            }
+        }
         protected void btnSwap_Click(object sender, EventArgs e)
         {
             try
