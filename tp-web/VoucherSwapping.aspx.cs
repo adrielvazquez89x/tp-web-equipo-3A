@@ -3,6 +3,7 @@ using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Optimization;
 using System.Web.UI;
@@ -206,11 +207,17 @@ namespace tp_web
 
                     //si pongo un mail que ya existe me da error 
 
-                    EmailService emailService = new EmailService();
+                    string userEmail = "programacionsorteos@gmail.com";
+                    string userPassword = "zlujsnytsxpeuvsy"; // Considera almacenar esto de manera segura
+                    var emailService = new EmailService(userEmail, userPassword);
+
+                    string to = customer.Email;
                     string subject = "Confirmación de participación";
                     string body = $"¡Gracias por participar! Has elegido el premio: {SelectedArticle}.";
-                    emailService.createMail(customer.Email, subject, body);
-                    emailService.sendEmail();
+
+                    // Llama al método SendEmailAsync de forma asíncrona
+                    Task.Run(async () => await emailService.SendEmailAsync(to, subject, body));
+
 
                     Response.Redirect("Success.aspx");
 

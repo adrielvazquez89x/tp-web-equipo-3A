@@ -13,39 +13,49 @@ namespace Business
 {
     public class EmailService
     {
-        private MailMessage email;
-        private SmtpClient server;
+       
+        private readonly string smtpServer = "smtp.gmail.com";
+        private readonly int port = 587; 
+        private readonly string userEmail;
+        private readonly string userPassword;
 
-        public EmailService()
+        public EmailService(string email, string password)
         {
-            server = new SmtpClient();
-            server.Credentials = new NetworkCredential("5e70abebe0c8e0", "3a5daa4af402b8");
-            server.Port = 2525;
-            server.Host = "smtp.mailtrap.io";
+            userEmail = email;
+            userPassword = password;
         }
 
-        public void createMail(string destination, string affair, string body)
-        {
-            email = new MailMessage();
-            email.From = new MailAddress("noresponder@sorteo.com");
-            email.To.Add(destination);
-            email.Subject = affair;
-            email.IsBodyHtml = true;
-            email.Body = body;
-
-        }
-
-        public void sendEmail()
+        public async Task SendEmailAsync(string to, string subject, string body)
         {
             try
             {
-                server.Send(email);
+                using (var client = new SmtpClient(smtpServer, port))
+                {
+                    client.Credentials = new NetworkCredential(userEmail, userPassword);
+                    client.EnableSsl = true;
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress(userEmail),
+                        Subject = subject,
+                        Body = body,
+                        IsBodyHtml = true
+                    };
+
+                    mailMessage.To.Add(to);
+
+                    await client.SendMailAsync(mailMessage);
+                    Console.WriteLine("Email sent successfully!");
+                }
             }
             catch (Exception ex)
             {
-                throw ex;
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                
             }
         }
+
+
     }
 
 }
