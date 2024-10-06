@@ -16,13 +16,15 @@ namespace tp_web
         public List<Article> ArtList { get; set; }
         public List<Model.Image> ImageList { get; set; }
 
-        public int SelectedArticle;
+        public int IdSelectedArt;
+
+        public Article selectedArt = new Article();
 
         public Customer customer = new Customer();
 
         public Voucher voucher = new Voucher();
 
-        public bool IsUserExists;
+        public bool UserExists;
         protected void Page_Load(object sender, EventArgs e)
         {
             BusinessArticle busines = new BusinessArticle();
@@ -38,7 +40,6 @@ namespace tp_web
                 rptListaDeCosas.DataSource = ArtList;
                 rptListaDeCosas.DataBind();
             }
-
         }
 
         protected void rptListaDeCosas_ItemDataBound(object sender, RepeaterItemEventArgs e)
@@ -93,16 +94,10 @@ namespace tp_web
             }
         }
 
-
-        protected void Wizard1_NextButtonClick(object sender, WizardNavigationEventArgs e)  //esto no es necesario... o para que?
-        {
-
-        }
-
         protected void btnPick_Click(object sender, EventArgs e)
         {
-            SelectedArticle = int.Parse(((Button)sender).CommandArgument);
-            Session["SelectedArticle"] = SelectedArticle;
+            IdSelectedArt = int.Parse(((Button)sender).CommandArgument);
+            Session["IdSelectedArt"] = IdSelectedArt;
             Wizard1.ActiveStepIndex = 2;
         }
 
@@ -138,7 +133,6 @@ namespace tp_web
             {
                 throw ex;
             }
-
         }
 
         protected int searchDNI(int dni)
@@ -156,72 +150,87 @@ namespace tp_web
             }
             return customer.Id;
         }
-
+        protected void chkAgree_CheckedChanged(object sender, EventArgs e)
+        {
+            btnSubmit.Enabled = chkAgree.Checked;
+        }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-
             try
             {
-                //aca van validaciones de los datos del cliente previo a inserta en la bd,
-                if (!FieldsValidation()) //solo si valida los campos conecto a la BD, sino, salgo de la funcion. AUN ESTA INCOMPLETA
+                //aca hacemos las validaciones de los datos del cliente previo a inserta en la bd:
+                if (!FieldsValidation()) //solo si valida los campos conecto a la BD, sino, salgo de la funcion.
                 {
                     return;
                 }
                 else
                 {
-                    BusinessCustomer customerBusiness = new BusinessCustomer();
-                    BusinessVoucher voucherBusiness = new BusinessVoucher();
-
-                    voucher.Code = Session["VoucherCode"].ToString();
-
-                    customer.Id = (int)Session["CustomerId"];
-                    //si el usuario es nuevo, el id aca es -1 y debemos cambiarlo al nuevo id que se genere
-                    //if (customer.Id == -1) //caso de usuario nuevo
-                    //{
-                    //    IsUserExists = false;
-                    //}
-
-                    IsUserExists = customer.Id == -1 ? false : true;
-
-                    customer.Document = (int)Session["CustomerDocument"];
-                    customer.Name = txtName.Text;
-                    customer.LastName = txtLastName.Text;
-                    customer.Email = txtEmail.Text;
-                    customer.Address = txtAdress.Text;
-                    customer.City = txtCity.Text;
-                    customer.CP = int.Parse(txtCP.Text);
-
-                    if (IsUserExists)
-                    {
-                        customerBusiness.modifyCustomer(customer);
-                    }
-                    else
-                    {
-                        customer.Id = customerBusiness.AddCustomer(customer);
-                    }
-                    
-                    //si el usuario NO es nuevo debemos chequear si hubo cambios en la info y actualizar
-                    SelectedArticle = (int)Session["SelectedArticle"]; //recupero el articulo
-
-                    voucherBusiness.ModifyVoucher(voucher.Code, customer.Id, DateTime.Now.Date, SelectedArticle);
-
-                    //si pongo un mail que ya existe me da error 
+                    BusinessArticle artBusiness = new BusinessArticle();
+                    IdSelectedArt = (int)Session["IdSelectedArt"]; //recupero el articulo
+                    selectedArt = artBusiness.findArticle(IdSelectedArt);
+                    manageCustomer(); //aca se agrega o actualiza el customer
+                    manageVoucher(IdSelectedArt); //aca se actualiza el estado del voucher
 
                     string userEmail = "programacionsorteos@gmail.com";
-                    string userPassword = "zlujsnytsxpeuvsy"; // Considera almacenar esto de manera segura
+                    string userPassword = "zlujsnytsxpeuvsy";
                     var emailService = new EmailService(userEmail, userPassword);
 
                     string to = customer.Email;
-                    string subject = "Confirmación de participación";
-                    string body = $"¡Gracias por participar! Has elegido el premio: {SelectedArticle}.";
+                    string subject = "Confirmation of participation";
+                    string body = $"Thank you for participating! You have chosen the prize: {selectedArt.Name}.";
 
                     // Llama al método SendEmailAsync de forma asíncrona
                     Task.Run(async () => await emailService.SendEmailAsync(to, subject, body));
 
-
-                    Response.Redirect("Success.aspx");
-
+                    Session["Success"] = "ok";
+                    Response.Redirect("Success.aspx?Id=" + IdSelectedArt);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void manageCustomer()
+        {
+            try
+            {
+                BusinessCustomer customerBusiness = new BusinessCustomer();
+                customer.Id = (int)Session["CustomerId"];
+                //si el usuario es nuevo, el id aca es -1 y debemos cambiarlo al nuevo id que se genere:
+                UserExists = customer.Id == -1 ? false : true;
+
+                customer.Document = (int)Session["CustomerDocument"];
+                customer.Name = txtName.Text;
+                customer.LastName = txtLastName.Text;
+                customer.Email = txtEmail.Text;
+                customer.Address = txtAdress.Text;
+                customer.City = txtCity.Text;
+                customer.CP = int.Parse(txtCP.Text);
+
+                if (UserExists) //si el usuario NO es nuevo actualizamos
+                {
+                    customerBusiness.modifyCustomer(customer);
+                }
+                else
+                {
+                    customer.Id = customerBusiness.AddCustomer(customer);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void manageVoucher(int IdSelectedArt)
+        {
+            try
+            {
+                BusinessVoucher voucherBusiness = new BusinessVoucher();
+                voucher.Code = Session["VoucherCode"].ToString(); //recupero el voucher
+                voucherBusiness.ModifyVoucher(voucher.Code, customer.Id, DateTime.Now.Date, IdSelectedArt);
             }
             catch (Exception ex)
             {
@@ -275,9 +284,6 @@ namespace tp_web
                     lblErrorCity.Visible = true;
                     lblErrorCity.Text = "No symbols or puntuaction";
                     break;
-
-                ///validar que no sean solo nros
-                ///
                 case -2: //el largo no es  el correcto
                     lblErrorCity.Visible = true;
                     lblErrorCity.Text = "Min Length 3, Max length 50";
@@ -302,7 +308,6 @@ namespace tp_web
                     lblErrorAdress.Text = "At least 3 non-numeric characters";
                     break;
             }
-            //validacion para email necesitamos?..
 
             if (lblErrorName.Visible || lblErrorLastName.Visible || lblErrorCity.Visible || lblErrorAdress.Visible || lblErrorCP.Visible) //si hay un cartel de error visible entonces es porque no paso todas las validaciones, devuelvo false
             {
@@ -314,9 +319,5 @@ namespace tp_web
             }
         }
 
-        protected void chkAgree_CheckedChanged(object sender, EventArgs e)
-        {
-            btnSubmit.Enabled = chkAgree.Checked;
-        }
     }
 }

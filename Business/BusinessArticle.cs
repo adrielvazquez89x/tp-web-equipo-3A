@@ -156,6 +156,46 @@ namespace Business
                 data.closeConnection();
             }
         }
+
+        public Article findArticle(int id)
+        {
+            Article aux = new Article();
+            DataAccess data = new DataAccess();
+
+            try
+            {
+                data.setQuery("SELECT A.Id, A.Codigo, A.Nombre, A.Descripcion, A.IdMarca, A.IdCategoria, A.Precio, M.Descripcion AS Brand, C.Descripcion AS Category" +
+                             " FROM ARTICULOS A JOIN MARCAS M ON M.Id = A.IdMarca JOIN CATEGORIAS C ON C.Id = A.IdCategoria" +
+                             " WHERE A.Id=@id");
+                data.setParameter("@id", id);
+                data.executeRead();
+
+                while (data.Reader.Read())
+                {
+                    aux.Id = (int)data.Reader["Id"];
+                    aux.Code = (string)data.Reader["Codigo"];
+                    aux.Name = (string)data.Reader["Nombre"];
+                    aux.Description = (string)data.Reader["Descripcion"];
+                    aux.Brand = new Brand();
+                    aux.Brand.Id = (int)data.Reader["IdMarca"];
+                    aux.Brand.Description = (string)data.Reader["Brand"];
+                    aux.Category = new Category();
+                    aux.Category.Id = (int)data.Reader["IdCategoria"];
+                    aux.Category.Description = (string)data.Reader["Category"];
+                    aux.Price = Math.Round((decimal)data.Reader["Precio"], 2);
+                }
+                return aux;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                data.closeConnection();
+            }
+        }
+
         public List<Article> filter(string field, string match, string filterText)
         {
             List<Article> filteredArtList = new List<Article>();

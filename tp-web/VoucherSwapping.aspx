@@ -2,7 +2,7 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="d-flex justify-content-center">
-        <asp:Wizard ID="Wizard1" runat="server" DisplaySideBar="False" ActiveStepIndex="0" OnNextButtonClick="Wizard1_NextButtonClick">
+        <asp:Wizard ID="Wizard1" runat="server" DisplaySideBar="False" ActiveStepIndex="0">
             <WizardSteps>
                 <%-- Validación del código --%>
                 <asp:WizardStep ID="WizardStep1" runat="server" Title="Step 1">
@@ -59,7 +59,7 @@
                                                     <p class="card-text"><%# Eval("Description") %></p>
                                                     <asp:Button
                                                         ID="btnPick" OnClick="btnPick_Click"
-                                                        CommandArgument='<%# Eval("Id") %>'
+                                                        CommandArgument='<%# Eval("Id")%>'
                                                         runat="server"
                                                         Text="I want this!" CssClass="btn btn-primary w-100" />
                                                 </div>
@@ -174,10 +174,10 @@
                         </div>
 
 
-
                         <%-- Submit --%>
                         <div class="container">
-                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary w-100" OnClick="btnSubmit_Click" Enabled="false" />
+                            <asp:Button ID="btnSubmit" runat="server" Text="Submit" CssClass="btn btn-primary w-100"
+                                 OnClick ="btnSubmit_Click" Enabled="false" />
                         </div>
 
                     </contenttemplate>
