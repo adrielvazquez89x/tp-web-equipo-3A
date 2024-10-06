@@ -26,5 +26,11 @@ namespace tp_web
         {
             Response.Redirect("Default.aspx");
         }
+
+        protected void btnGoToSwapping_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("VoucherSwapping.aspx");
+
+        }
     }
 }
