@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -171,8 +172,8 @@ namespace tp_web
                     manageCustomer(); //aca se agrega o actualiza el customer
                     manageVoucher(IdSelectedArt); //aca se actualiza el estado del voucher
 
-                    string userEmail = "programacionsorteos@gmail.com";
-                    string userPassword = "zlujsnytsxpeuvsy";
+                    string userEmail = ConfigurationManager.AppSettings["UserEmail"];
+                    string userPassword = ConfigurationManager.AppSettings["UserPassword"];
                     var emailService = new EmailService(userEmail, userPassword);
 
                     string to = customer.Email;
